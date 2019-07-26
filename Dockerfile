@@ -1,31 +1,38 @@
-FROM debian:jessie
+FROM debian:buster
 MAINTAINER xxaxxelxx <x@axxel.net>
 
 #RUN sed -e 's/$/ contrib non-free/' -i /etc/apt/sources.list 
 
-RUN apt-get -qq -y update
-RUN apt-get -qq -y dist-upgrade
-
-ENV TERM=xterm
 ENV DEBIAN_FRONTEND=noninteractive
+#ARG DEBIAN_FRONTEND=noninteractive
+#ENV TERM=xterm
 
-RUN apt-get -qq -y install ssh
-RUN apt-get -qq -y install sudo
-RUN apt-get -qq -y install rsync
-RUN apt-get -qq -y install mc
+#RUN apt-get -qq -y install apt-utils
+RUN apt-get -qq -y update
+
+#RUN apt-get -qq -y dist-upgrade
+#RUN apt-get update && apt-get install -yy apt-utils
+
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get -qq -y install ssh
+
+
+#RUN DEBIAN_FRONTEND=noninteractive apt-get -qq -y install sudo
+#RUN apt-get -qq -y install rsync
+#RUN apt-get -qq -y install mc
 
 # clean up
-RUN apt-get clean
+#RUN apt-get clean
 
-RUN mkdir /var/run/sshd
+#RUN mkdir /var/run/sshd
 
-RUN useradd -m -g nogroup storage
-RUN sudo -u depot mkdir /home/storage/.ssh
-COPY authorized_keys2 /home/storage/.ssh/
-RUN chown -R depot:nogroup /home/storage/.ssh
-RUN sudo -u depot chmod -R 700 /home/storage/.ssh
+#RUN useradd -m -g nogroup storageuser
+#RUN sudo -u storageuser mkdir /home/storageuser/.ssh
+#COPY authorized_keys2 /home/storageuser/.ssh/
+#RUN chown -R storageuser:nogroup /home/storageuser/.ssh
+#RUN sudo -u storageuser chmod -R 700 /home/storageuser/.ssh
 
-COPY entrypoint.sh /entrypoint.sh
+#COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 #CMD [ "bash" ]
